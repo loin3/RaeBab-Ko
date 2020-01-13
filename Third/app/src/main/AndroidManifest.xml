@@ -16,6 +16,7 @@
         <activity android:name=".StartActivity"></activity>
         <activity android:name=".SettingActivity" />
         <activity android:name=".AlarmActivity" />
+        <activity android:name=".Normal_Login_Activity" />
 
         <service
             android:name=".AlarmService"

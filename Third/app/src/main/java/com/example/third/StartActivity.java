@@ -116,7 +116,7 @@ public class StartActivity extends AppCompatActivity {
 
     private void signIn(){
         FirebaseAuth.getInstance()
-                .signInWithEmailAndPassword(email.getText().toString().trim(), password.getText().toString().trim())
+                .signInWithEmailAndPassword(email.getText().toString().trim(), password.getText().toString())
                 .addOnCompleteListener(StartActivity.this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
@@ -135,43 +135,8 @@ public class StartActivity extends AppCompatActivity {
     }
 
     private void normalSignUp() {
-        LayoutInflater normalLogin = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        ConstraintLayout normalLoginLayout = (ConstraintLayout) normalLogin.inflate(R.layout.dialog_login, null);
-
-        final EditText id = (EditText) normalLoginLayout.findViewById(R.id.userId);
-        final EditText pw = (EditText) normalLoginLayout.findViewById(R.id.passWord);
-
-        new AlertDialog.Builder(this)
-                .setTitle("Registration")
-                .setView(normalLoginLayout)
-                .setPositiveButton("Register", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        FirebaseAuth.getInstance()
-                                .createUserWithEmailAndPassword(id.getText().toString(), pw.getText().toString())
-                                .addOnCompleteListener(StartActivity.this, new OnCompleteListener<AuthResult>() {
-                                    @Override
-                                    public void onComplete(@NonNull Task<AuthResult> task) {
-                                        if (task.isSuccessful()) {
-                                            Log.d("TAG", "signUpWithEmail:success");
-                                            Toast.makeText(getApplicationContext(), "Registration success.", Toast.LENGTH_SHORT).show();
-                                            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-                                            updateUI(user);
-                                        }
-                                        else {
-                                            Log.w("TAG", "signUpWithEmail:failure", task.getException());
-                                            Toast.makeText(getApplicationContext(), "Registration failed.", Toast.LENGTH_SHORT).show();
-                                            updateUI(null);
-                                        }
-                                    }
-                                });
-                    }
-                })
-                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                    }
-                }).show();
+        Intent intent = new Intent(getApplicationContext(), Normal_Login_Activity.class);
+        startActivityForResult(intent, 201);
     }
 
     // For Google Login with Firebase
@@ -194,6 +159,36 @@ public class StartActivity extends AppCompatActivity {
             } catch (ApiException e) {
                 e.printStackTrace();
             }
+        }
+
+        if (requestCode == 201) {
+            if (resultCode == RESULT_OK) {
+                String id = data.getStringExtra("id");
+                String pw = data.getStringExtra("pw");
+
+                FirebaseAuth.getInstance()
+                        .createUserWithEmailAndPassword(id, pw)
+                        .addOnCompleteListener(StartActivity.this, new OnCompleteListener<AuthResult>() {
+                            @Override
+                            public void onComplete(@NonNull Task<AuthResult> task) {
+                                if (task.isSuccessful()) {
+                                    Log.d("TAG", "signUpWithEmail:success");
+                                    Toast.makeText(getApplicationContext(), "Registration success.", Toast.LENGTH_SHORT).show();
+                                    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                                    updateUI(user);
+                                } else {
+                                    Log.w("TAG", "signUpWithEmail:failure", task.getException());
+                                    Toast.makeText(getApplicationContext(), "Registration failed.", Toast.LENGTH_SHORT).show();
+                                    updateUI(null);
+                                }
+                            }
+                        });
+            }
+            else if (resultCode == RESULT_CANCELED){
+                Toast.makeText(StartActivity.this, "Cancel!", Toast.LENGTH_LONG).show();
+            }
+            else if (resultCode == 2)
+                Toast.makeText(StartActivity.this, "NULL INPUT!!", Toast.LENGTH_LONG).show();
         }
     }
 

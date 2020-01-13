@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<androidx.constraintlayout.widget.ConstraintLayout
+    android:orientation="vertical"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <ImageButton
+        android:layout_height="200dp"
+        android:layout_width="200dp"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:scaleType="fitXY"
+        android:adjustViewBounds="true"
+        android:layout_marginTop="16dp"
+        android:id="@+id/user_image"/>
+
+    <TextView
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginTop="4dp"
+        android:id="@+id/user_image_text"
+        android:layout_marginBottom="4dp"
+        app:layout_constraintTop_toBottomOf="@id/user_image"
+        android:hint="Your face"/>
+
+    <TextView
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginTop="12dp"
+        android:id="@+id/Email_Address"
+        app:layout_constraintTop_toBottomOf="@id/user_image_text"
+        android:text="Email Address"
+        android:layout_marginLeft="8dp"/>
+
+    <EditText
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:id="@+id/userId"
+        android:layout_marginBottom="4dp"
+        app:layout_constraintTop_toBottomOf="@id/Email_Address"
+        android:hint="Write down your email, please"
+        android:layout_marginLeft="4dp"
+        android:layout_marginRight="4dp"
+        android:inputType="textEmailAddress"/>
+
+    <TextView
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginTop="12dp"
+        android:id="@+id/Password"
+        app:layout_constraintTop_toBottomOf="@id/userId"
+        android:text="Password"
+        android:layout_marginLeft="8dp"/>
+
+    <EditText
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:id="@+id/passWord"
+        android:layout_marginBottom="16dp"
+        app:layout_constraintTop_toBottomOf="@id/Password"
+        android:hint="Write down your password, please"
+        android:layout_marginLeft="4dp"
+        android:layout_marginRight="4dp"
+        android:inputType="textPassword"
+        android:fontFamily="sans-serif"/>
+
+    <Button
+        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:id="@+id/register_button"
+        android:text="Register"
+        app:layout_constraintRight_toLeftOf="@id/cancel_button"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_weight="1"/>
+
+    <Button
+        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        app:layout_constraintRight_toRightOf="parent"
+        android:id="@+id/cancel_button"
+        android:text="Cancel"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_weight="1"
+        app:layout_constraintLeft_toRightOf="@id/register_button"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
