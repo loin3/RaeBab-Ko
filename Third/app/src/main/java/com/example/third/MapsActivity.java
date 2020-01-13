@@ -31,13 +31,11 @@ import com.google.android.libraries.places.api.Places;
 
 public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback {
 
-
     private static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1001;
     private GoogleMap gMap;
     private boolean mLocationPermissionGranted = false;
     private Location mLastKnownLocation = null;
     private FusedLocationProviderClient mFusedLocationProviderClient;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,7 +71,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             }
         });
     }
-
 
     @Override
     public void onMapReady(GoogleMap googleMap) {

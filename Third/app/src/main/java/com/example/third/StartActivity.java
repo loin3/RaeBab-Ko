@@ -29,7 +29,9 @@ import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.GetTokenResult;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class StartActivity extends AppCompatActivity {
 
@@ -71,7 +73,6 @@ public class StartActivity extends AppCompatActivity {
             finish();
         }
          */
-
 
         // Configure Google Sign up
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -163,8 +164,8 @@ public class StartActivity extends AppCompatActivity {
 
         if (requestCode == 201) {
             if (resultCode == RESULT_OK) {
-                String id = data.getStringExtra("id");
-                String pw = data.getStringExtra("pw");
+                final String id = data.getStringExtra("id");
+                final String pw = data.getStringExtra("pw");
 
                 FirebaseAuth.getInstance()
                         .createUserWithEmailAndPassword(id, pw)
@@ -175,6 +176,23 @@ public class StartActivity extends AppCompatActivity {
                                     Log.d("TAG", "signUpWithEmail:success");
                                     Toast.makeText(getApplicationContext(), "Registration success.", Toast.LENGTH_SHORT).show();
                                     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+                                    user.getIdToken(true)
+                                            .addOnCompleteListener(new OnCompleteListener<GetTokenResult>() {
+                                                @Override
+                                                public void onComplete(@NonNull Task<GetTokenResult> task) {
+                                                    if (task.isSuccessful()){
+                                                        User_Infomation user_infomation = new User_Infomation(task.getResult().getToken(), "Initialization");
+                                                        FirebaseDatabase.getInstance().getReference().child("User").child(id.substring(0, id.indexOf("@"))).setValue(user_infomation);
+                                                        Log.e("REGISTRATION_DATABASE", "SUCCESS");
+                                                        Log.e("REGISTRATION_DATABASE", id.substring(0, id.indexOf("@")));
+
+                                                    }
+                                                    else {
+                                                        Log.e("REGISTRATION_DATABASE", "FAIL");
+                                                    }
+                                                }
+                                            });
                                     updateUI(user);
                                 } else {
                                     Log.w("TAG", "signUpWithEmail:failure", task.getException());

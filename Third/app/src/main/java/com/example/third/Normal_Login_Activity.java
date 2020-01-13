@@ -53,7 +53,7 @@ public class Normal_Login_Activity extends Activity {
                 Intent intent = new Intent();
                 intent.putExtra("id", id_pass);
                 intent.putExtra("pw", pw_pass);
-                //intent.putExtra("image", )
+                //intent.putExtra("image", ) To save the image files
 
                 setResult(RESULT_OK, intent);
                 finish();

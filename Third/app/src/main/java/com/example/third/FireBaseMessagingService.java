@@ -17,6 +17,7 @@ import androidx.core.app.NotificationCompat;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.iid.FirebaseInstanceId;
@@ -30,35 +31,6 @@ public class FireBaseMessagingService extends FirebaseMessagingService {
     private static final String TAG = "MyFirebaseMsgService";
 
     @Override
-    public void onNewToken(@NonNull String s) {
-        super.onNewToken(s);
-        String refreshedToken = FirebaseInstanceId.getInstance().getToken();
-        Log.d(TAG, "Refreshed token: " + refreshedToken);
-        sendRegistrationToServer(refreshedToken);
-    }
-
-    private void sendRegistrationToServer(String token) {
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        Map<String, String> user = new HashMap<>();
-        user.put("token", token);
-
-        db.collection("user")
-                .add(user)
-                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                    @Override
-                    public void onSuccess(DocumentReference documentReference) {
-                        Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.w(TAG, "Error adding document", e);
-                    }
-                });
-    }
-
-    @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
         Log.d(TAG, "From: " + remoteMessage.getFrom());
 
@@ -70,8 +42,8 @@ public class FireBaseMessagingService extends FirebaseMessagingService {
 
     private void sendNotification(Map map) {
         Intent intent = new Intent(this, DescriptionActivity.class);
-//        intent.putExtra("description", (map.get("description").toString()));
- //       intent.putExtra("location", (map.get("location").toString()));
+//       intent.putExtra("description", (map.get("description").toString()));
+//       intent.putExtra("location", (map.get("location").toString()));
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent,
                 PendingIntent.FLAG_UPDATE_CURRENT);
