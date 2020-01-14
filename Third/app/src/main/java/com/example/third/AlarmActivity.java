@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.location.Location;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.util.Log;
@@ -71,8 +72,7 @@ public class AlarmActivity extends AppCompatActivity {
                 ref2.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        Log.d("asdf", dataSnapshot.getValue(User_Infomation.class).token);
-                        sendMessage(dataSnapshot.getValue(User_Infomation.class).token, sharedPreferences.getString("description", null));
+                        sendMessage(dataSnapshot.getValue(User_Infomation.class).token, sharedPreferences.getString("description", null), sharedPreferences.getString("image", null));
                     }
 
                     @Override
@@ -104,12 +104,14 @@ public class AlarmActivity extends AppCompatActivity {
         });
     }
 
-    public void sendMessage(String token, String description){
+    public void sendMessage(String token, String description, String image){
         JSONObject jsonObj = new JSONObject();
         try {
+            Log.d("zxcv", image);
             jsonObj.put("to", token);
             JSONObject jsonObject= new JSONObject();
             jsonObject.put("description", description);
+            jsonObject.put("image", image);
             jsonObj.put("data", jsonObject);
 
         } catch (JSONException e) {

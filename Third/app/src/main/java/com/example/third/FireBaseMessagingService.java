@@ -44,16 +44,15 @@ public class FireBaseMessagingService extends FirebaseMessagingService {
         Log.d(TAG, "From: " + remoteMessage.getFrom());
         Log.d(TAG, "shit: " + remoteMessage.getData().toString());
         if (remoteMessage.getData().size() > 0) {
-            sendNotification(remoteMessage.getData().get("description"));
+            sendNotification(remoteMessage.getData().get("description"), remoteMessage.getData().get("image"));
         }
     }
 
-    private void sendNotification(String description) {
-
-        Log.d("zxcv", description);
+    private void sendNotification(String description, String image) {
 
         Intent intent = new Intent(this, DescriptionActivity.class);
         intent.putExtra("description", description);
+        intent.putExtra("image", image);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 

@@ -214,7 +214,10 @@ public class StartActivity extends AppCompatActivity {
                                             mDataBase.child("User").child(id.substring(0, id.indexOf("@"))).child("profile").setValue(uri.toString());
                                             SharedPreferences sharedPreferences = getSharedPreferences("member", MODE_PRIVATE);
                                             SharedPreferences.Editor editor = sharedPreferences.edit();
-                                            editor.putString("image", uri.toString());
+                                            editor.putString("image", String.valueOf(uri));
+                                            Log.d("zxcv", String.valueOf(uri));
+                                            editor.putString("userid",id.substring(0, id.indexOf("@")));
+                                            editor.commit();
                                         }
                                     });
                                 }
