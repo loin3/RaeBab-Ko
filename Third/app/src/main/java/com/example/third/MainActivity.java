@@ -33,8 +33,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Intent intent = new Intent(this, StartActivity.class);
-        startActivity(intent);
+        Intent intent2=new Intent(this, LoadingActivity.class);
+        startActivity(intent2);
 
         Places.initialize(getApplicationContext(), apiKey);
         PlacesClient placesClient = Places.createClient(this);

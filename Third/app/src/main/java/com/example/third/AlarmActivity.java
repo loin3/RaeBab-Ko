@@ -5,10 +5,12 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.util.Log;
+import android.view.Display;
 import android.view.View;
 import android.widget.Button;
 
@@ -35,6 +37,8 @@ import java.util.Map;
 
 public class AlarmActivity extends AppCompatActivity {
 
+    private SharedPreferences sharedPreferences;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,6 +56,7 @@ public class AlarmActivity extends AppCompatActivity {
             }
         });
 
+        sharedPreferences = getSharedPreferences("member", MODE_PRIVATE);
 
         Intent intent = getIntent();
         Location location = intent.getParcelableExtra("location");
@@ -66,7 +71,8 @@ public class AlarmActivity extends AppCompatActivity {
                 ref2.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        sendMessage(dataSnapshot.getValue(User_Infomation.class).token, dataSnapshot.getValue(User_Infomation.class).outfit);
+                        Log.d("asdf", dataSnapshot.getValue(User_Infomation.class).token);
+                        sendMessage(dataSnapshot.getValue(User_Infomation.class).token, sharedPreferences.getString("description", null));
                     }
 
                     @Override
@@ -102,7 +108,10 @@ public class AlarmActivity extends AppCompatActivity {
         JSONObject jsonObj = new JSONObject();
         try {
             jsonObj.put("to", token);
-            jsonObj.put("description", description);
+            JSONObject jsonObject= new JSONObject();
+            jsonObject.put("description", description);
+            jsonObj.put("data", jsonObject);
+
         } catch (JSONException e) {
             e.printStackTrace();
         }

@@ -19,6 +19,7 @@ import androidx.core.app.NotificationCompat;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
+import java.util.HashMap;
 import java.util.Map;
 
 public class FireBaseMessagingService extends FirebaseMessagingService {
@@ -41,15 +42,15 @@ public class FireBaseMessagingService extends FirebaseMessagingService {
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
         Log.d(TAG, "From: " + remoteMessage.getFrom());
-
-        if (remoteMessage.getNotification() != null) {
-            Log.d(TAG, "Message Notification Body: " + remoteMessage.getNotification().getBody());
-            sendNotification(remoteMessage.getData());
+        Log.d(TAG, "shit: " + remoteMessage.getData().toString());
+        if (remoteMessage.getData().size() > 0) {
+            sendNotification(remoteMessage.getData().get("description"));
         }
     }
 
-    private void sendNotification(Map map) {
-        String description = (String) map.get("description");
+    private void sendNotification(String description) {
+
+        Log.d("zxcv", description);
 
         Intent intent = new Intent(this, DescriptionActivity.class);
         intent.putExtra("description", description);

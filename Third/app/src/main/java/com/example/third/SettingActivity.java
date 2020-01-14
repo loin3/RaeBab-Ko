@@ -26,13 +26,14 @@ public class SettingActivity extends AppCompatActivity {
 
     private EditText editText;
     private LinearLayout linearLayout;
+    private SharedPreferences sharedPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setting);
 
-        SharedPreferences sharedPreferences = getSharedPreferences("member", MODE_PRIVATE);
+        sharedPreferences = getSharedPreferences("member", MODE_PRIVATE);
 
         final RadioGroup radioGroup = (RadioGroup)findViewById(R.id.radioGroup);
 
@@ -69,6 +70,10 @@ public class SettingActivity extends AppCompatActivity {
                 int radioId = radioGroup.getCheckedRadioButtonId();
                 RadioButton radioButton = (RadioButton)findViewById(radioId);
                 FirebaseDatabase.getInstance().getReference().child("User").child(FirebaseAuth.getInstance().getCurrentUser().getEmail().substring(0, FirebaseAuth.getInstance().getCurrentUser().getEmail().indexOf("@"))).child("outfit").setValue(editText.getText().toString());
+
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putString("description", editText.getText().toString());
+                editor.commit();
 
                 Intent intent1 = new Intent(SettingActivity.this, AlarmService.class);
                 intent1.putExtra("distance", radioButton.getText());

@@ -201,18 +201,30 @@ public class StartActivity extends AppCompatActivity {
                 SimpleDateFormat formatter = new SimpleDateFormat("yyyy_MMDD_HH:mm:ss");
                 Date now = new Date();
                 final String profile_image_name = formatter.format(now);
-                reference.child("profile_images").child(profile_image_name).putFile(fp)
-                        .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                            @Override
-                            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                                reference.child("profile_images").child(profile_image_name).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                                    @Override
-                                    public void onSuccess(Uri uri) {
-                                        mDataBase.child("User").child(id.substring(0, id.indexOf("@"))).child("profile").setValue(uri.toString());
-                                    }
-                                });
-                            }
-                        });
+
+                // Profile image is set
+                if (fp != null) {
+                    reference.child("profile_images").child(profile_image_name).putFile(fp)
+                            .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                                @Override
+                                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                                    reference.child("profile_images").child(profile_image_name).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                        @Override
+                                        public void onSuccess(Uri uri) {
+                                            mDataBase.child("User").child(id.substring(0, id.indexOf("@"))).child("profile").setValue(uri.toString());
+                                            SharedPreferences sharedPreferences = getSharedPreferences("member", MODE_PRIVATE);
+                                            SharedPreferences.Editor editor = sharedPreferences.edit();
+                                            editor.putString("image", uri.toString());
+                                        }
+                                    });
+                                }
+                            });
+                }
+
+                // Profile image is not set
+                else {
+                    Log.e("Null image", "NULL!");
+                }
 
                 FirebaseAuth.getInstance()
                         .createUserWithEmailAndPassword(id, pw)
