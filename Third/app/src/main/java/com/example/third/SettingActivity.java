@@ -68,7 +68,6 @@ public class SettingActivity extends AppCompatActivity {
             public void onClick(View view) {
                 int radioId = radioGroup.getCheckedRadioButtonId();
                 RadioButton radioButton = (RadioButton)findViewById(radioId);
-
                 FirebaseDatabase.getInstance().getReference().child("User").child(FirebaseAuth.getInstance().getCurrentUser().getEmail().substring(0, FirebaseAuth.getInstance().getCurrentUser().getEmail().indexOf("@"))).child("outfit").setValue(editText.getText().toString());
 
                 Intent intent1 = new Intent(SettingActivity.this, AlarmService.class);

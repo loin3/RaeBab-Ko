@@ -1,17 +1,32 @@
 package com.example.third;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageSwitcher;
 
+import androidx.annotation.NonNull;
+
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.OnProgressListener;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 public class Normal_Login_Activity extends Activity {
 
+    private Uri fp_pass;
     private ImageButton ib;
     private Button rb;
     private Button cb;
@@ -53,7 +68,7 @@ public class Normal_Login_Activity extends Activity {
                 Intent intent = new Intent();
                 intent.putExtra("id", id_pass);
                 intent.putExtra("pw", pw_pass);
-                //intent.putExtra("image", ) To save the image files
+                intent.putExtra("fp", fp_pass);
 
                 setResult(RESULT_OK, intent);
                 finish();
@@ -76,6 +91,7 @@ public class Normal_Login_Activity extends Activity {
         if (requestCode == 1)
             if (resultCode == RESULT_OK) {
                 Uri selectedImage = imageReturnedIntent.getData();
+                fp_pass = selectedImage;
                 ib.setImageURI(selectedImage);
             }
     }

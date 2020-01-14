@@ -5,11 +5,15 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.OpenableColumns;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,9 +25,12 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.auth.api.signin.internal.Storage;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
@@ -31,14 +38,22 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GetTokenResult;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.OnProgressListener;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class StartActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth = null;
     private GoogleSignInClient mGoogleSignInClient;
-    private static final int RC_SIGN_IN = 9001;
-    private static final int NORMAL_SIGN_IN = 9002;
+    private static final int GOOGLE_SIGN = 9001;
+    private static final int NORMAL_SIGN = 9002;
 
     private EditText email;
     private EditText password;
@@ -116,42 +131,54 @@ public class StartActivity extends AppCompatActivity {
     }
 
     private void signIn(){
-        FirebaseAuth.getInstance()
-                .signInWithEmailAndPassword(email.getText().toString().trim(), password.getText().toString())
-                .addOnCompleteListener(StartActivity.this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()){
-                            Log.d("TAG", "signInWithEmail:success");
-                            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-                            updateUI(user);
+        if (email.getText().toString().trim().isEmpty() || password.getText().toString().trim().isEmpty()) {
+            if (email.getText().toString().trim().isEmpty() && !password.getText().toString().trim().isEmpty())
+                Toast.makeText(getApplicationContext(), "Empty email!", Toast.LENGTH_LONG).show();
+            else if (!email.getText().toString().trim().isEmpty() && password.getText().toString().trim().isEmpty())
+                Toast.makeText(getApplicationContext(), "Empty password!", Toast.LENGTH_LONG).show();
+            else
+                Toast.makeText(getApplicationContext(), "Empty email and password!", Toast.LENGTH_LONG).show();
+        }
+        else {
+            FirebaseAuth.getInstance()
+                    .signInWithEmailAndPassword(email.getText().toString().trim(), password.getText().toString())
+                    .addOnCompleteListener(StartActivity.this, new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            if (task.isSuccessful()) {
+                                Log.d("TAG", "signInWithEmail:success");
+                                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                                Toast.makeText(getApplicationContext(), "Login success", Toast.LENGTH_SHORT).show();
+                                updateUI(user);
+                            } else {
+                                Log.w("TAG", "signInWithEmail:failure", task.getException());
+                                Toast.makeText(getApplicationContext(), "Please check your email and password again", Toast.LENGTH_SHORT).show();
+                                updateUI(null);
+                            }
                         }
-                        else {
-                            Log.w("TAG", "signInWithEmail:failure", task.getException());
-                            Toast.makeText(getApplicationContext(), "Authentication failed.", Toast.LENGTH_SHORT).show();
-                            updateUI(null);
-                        }
-                    }
-                });
+                    });
+        }
     }
 
     private void normalSignUp() {
         Intent intent = new Intent(getApplicationContext(), Normal_Login_Activity.class);
-        startActivityForResult(intent, 201);
+        startActivityForResult(intent, NORMAL_SIGN);
     }
 
     // For Google Login with Firebase
     private void googleSignUp() {
         Intent signInIntent = mGoogleSignInClient.getSignInIntent();
-        startActivityForResult(signInIntent, RC_SIGN_IN);
+        startActivityForResult(signInIntent, GOOGLE_SIGN);
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data){
         super.onActivityResult(requestCode, resultCode, data);
+        final DatabaseReference mDataBase = FirebaseDatabase.getInstance().getReference();
+        final StorageReference reference =  FirebaseStorage.getInstance().getReferenceFromUrl("gs://thirdweek-247d7.appspot.com/");
 
-        // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
-        if(requestCode == RC_SIGN_IN) {
+        // Result of "Google" sign up
+        if(requestCode == GOOGLE_SIGN) {
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
             try {
                 // Google Sing In was successful, authenticate with Firebase
@@ -162,10 +189,30 @@ public class StartActivity extends AppCompatActivity {
             }
         }
 
-        if (requestCode == 201) {
+        // Result of normal sign up
+        if (requestCode == NORMAL_SIGN) {
             if (resultCode == RESULT_OK) {
+                // id = email, pw = password, fp = filepath of user profile image
                 final String id = data.getStringExtra("id");
                 final String pw = data.getStringExtra("pw");
+                final Uri fp = data.getParcelableExtra("fp");
+
+                // Store image in the firestore as image file
+                SimpleDateFormat formatter = new SimpleDateFormat("yyyy_MMDD_HH:mm:ss");
+                Date now = new Date();
+                final String profile_image_name = formatter.format(now);
+                reference.child("profile_images").child(profile_image_name).putFile(fp)
+                        .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                            @Override
+                            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                                reference.child("profile_images").child(profile_image_name).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                    @Override
+                                    public void onSuccess(Uri uri) {
+                                        mDataBase.child("User").child(id.substring(0, id.indexOf("@"))).child("profile").setValue(uri.toString());
+                                    }
+                                });
+                            }
+                        });
 
                 FirebaseAuth.getInstance()
                         .createUserWithEmailAndPassword(id, pw)
@@ -173,20 +220,19 @@ public class StartActivity extends AppCompatActivity {
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {
                                 if (task.isSuccessful()) {
-                                    Log.d("TAG", "signUpWithEmail:success");
                                     Toast.makeText(getApplicationContext(), "Registration success.", Toast.LENGTH_SHORT).show();
+                                    // Get login user information
                                     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
+                                    // Take device token and store it in the realtime database.
                                     user.getIdToken(true)
                                             .addOnCompleteListener(new OnCompleteListener<GetTokenResult>() {
                                                 @Override
                                                 public void onComplete(@NonNull Task<GetTokenResult> task) {
                                                     if (task.isSuccessful()){
-                                                        User_Infomation user_infomation = new User_Infomation(task.getResult().getToken(), "Initialization");
-                                                        FirebaseDatabase.getInstance().getReference().child("User").child(id.substring(0, id.indexOf("@"))).setValue(user_infomation);
-                                                        Log.e("REGISTRATION_DATABASE", "SUCCESS");
-                                                        Log.e("REGISTRATION_DATABASE", id.substring(0, id.indexOf("@")));
-
+                                                        // Make and store user profile info in the realtime database
+                                                        User_Infomation user_infomation = new User_Infomation(getSharedPreferences("member", MODE_PRIVATE).getString("token", null), "Initialization");
+                                                        mDataBase.child("User").child(id.substring(0, id.indexOf("@"))).setValue(user_infomation);
                                                     }
                                                     else {
                                                         Log.e("REGISTRATION_DATABASE", "FAIL");
@@ -194,6 +240,7 @@ public class StartActivity extends AppCompatActivity {
                                                 }
                                             });
                                     updateUI(user);
+
                                 } else {
                                     Log.w("TAG", "signUpWithEmail:failure", task.getException());
                                     Toast.makeText(getApplicationContext(), "Registration failed.", Toast.LENGTH_SHORT).show();
@@ -203,9 +250,11 @@ public class StartActivity extends AppCompatActivity {
                         });
             }
             else if (resultCode == RESULT_CANCELED){
+                // Action when we push "cancel" button in the registration page
                 Toast.makeText(StartActivity.this, "Cancel!", Toast.LENGTH_LONG).show();
             }
             else if (resultCode == 2)
+                // Action when we put null text on email or password
                 Toast.makeText(StartActivity.this, "NULL INPUT!!", Toast.LENGTH_LONG).show();
         }
     }
@@ -217,6 +266,7 @@ public class StartActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()){
+
                             // Sign in success, update UI with the signed-in user's information
                             FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
                             updateUI(user);

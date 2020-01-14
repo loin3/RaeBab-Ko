@@ -1,5 +1,7 @@
 package com.example.third;
 
+import android.net.Uri;
+
 public class User_Infomation {
     public String token;
     public String outfit;
