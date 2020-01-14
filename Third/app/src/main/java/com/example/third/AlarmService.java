@@ -42,7 +42,6 @@ public class AlarmService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
 
-
         if (intent != null) {
             reference = FirebaseDatabase.getInstance().getReference("geo");
             geoFire = new GeoFire(reference);
@@ -74,6 +73,7 @@ public class AlarmService extends Service {
                         Log.d("tlqkf", "??" + distance);
                         if(mLastKnownLocation.distanceTo(destination) < distance){
                             Intent intent1 = new Intent(getApplicationContext(), AlarmActivity.class);
+                            intent1.putExtra("location", mLastKnownLocation);
                             intent1.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                             startActivity(intent1);
                             geoFire.removeLocation(userId);

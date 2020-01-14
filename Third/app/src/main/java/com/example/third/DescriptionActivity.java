@@ -16,7 +16,7 @@ public class DescriptionActivity extends AppCompatActivity {
         TextView textView = (TextView)findViewById(R.id.textView4);
 
         Intent intent = getIntent();
-      //  textView.setText(intent.getExtras().getString("description") + " " + intent.getExtras().getString("location"));
+        textView.setText(intent.getExtras().getString("description"));
 
     }
 }
