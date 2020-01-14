@@ -9,16 +9,26 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
+import com.firebase.geofire.GeoFire;
+import com.firebase.geofire.GeoLocation;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class AlarmService extends Service {
+
 
     private FusedLocationProviderClient mFusedLocationProviderClient;
     private Location mLastKnownLocation = null;
     private boolean running = true;
+    private DatabaseReference reference;
+    private GeoFire geoFire;
+    private String userId = FirebaseAuth.getInstance().getCurrentUser().getEmail().substring(0, FirebaseAuth.getInstance().getCurrentUser().getEmail().indexOf("@"));
 
     public AlarmService() {
     }
@@ -32,9 +42,20 @@ public class AlarmService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
 
+
         if (intent != null) {
+            reference = FirebaseDatabase.getInstance().getReference("geo");
+            geoFire = new GeoFire(reference);
+
             Bundle bundle = intent.getBundleExtra("bundle");
             Location location = bundle.getParcelable("destination");
+            mLastKnownLocation = bundle.getParcelable("lastLocation");
+            geoFire.setLocation(userId, new GeoLocation(mLastKnownLocation.getLatitude(), mLastKnownLocation.getLongitude()), new GeoFire.CompletionListener() {
+                @Override
+                public void onComplete(String key, DatabaseError error) {
+                    Log.d("tlqkf", "tlqkfrj");
+                }
+            });
             handleActionFoo(location, Integer.parseInt(intent.getExtras().getString("distance")));
         }
 
@@ -55,6 +76,7 @@ public class AlarmService extends Service {
                             Intent intent1 = new Intent(getApplicationContext(), AlarmActivity.class);
                             intent1.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                             startActivity(intent1);
+                            geoFire.removeLocation(userId);
                             running = false;
                             stopSelf();
                         }

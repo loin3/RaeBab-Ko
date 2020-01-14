@@ -64,6 +64,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                     location.setLatitude(latLng.latitude);
                     location.setLongitude(latLng.longitude);
                     bundle1.putParcelable("destination", location);
+                    bundle1.putParcelable("lastLocation", mLastKnownLocation);
                     intent1.putExtra("bundle", bundle1);
                     startActivity(intent1);
                     finish();

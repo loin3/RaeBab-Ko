@@ -18,6 +18,9 @@ import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.FirebaseDatabase;
+
 
 public class SettingActivity extends AppCompatActivity {
 
@@ -65,6 +68,8 @@ public class SettingActivity extends AppCompatActivity {
             public void onClick(View view) {
                 int radioId = radioGroup.getCheckedRadioButtonId();
                 RadioButton radioButton = (RadioButton)findViewById(radioId);
+
+                FirebaseDatabase.getInstance().getReference().child("User").child(FirebaseAuth.getInstance().getCurrentUser().getEmail().substring(0, FirebaseAuth.getInstance().getCurrentUser().getEmail().indexOf("@"))).child("outfit").setValue(editText.getText().toString());
 
                 Intent intent1 = new Intent(SettingActivity.this, AlarmService.class);
                 intent1.putExtra("distance", radioButton.getText());

@@ -5,26 +5,20 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.BitmapFactory;
+
 import android.media.RingtoneManager;
 import android.net.Uri;
 
 import android.os.Build;
 import android.util.Log;
 
-import androidx.annotation.NonNull;
+
 import androidx.core.app.NotificationCompat;
 
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.iid.FirebaseInstanceId;
+
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
-import java.util.HashMap;
 import java.util.Map;
 
 public class FireBaseMessagingService extends FirebaseMessagingService {
