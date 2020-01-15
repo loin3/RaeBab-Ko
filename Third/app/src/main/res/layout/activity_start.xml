@@ -1,77 +1,159 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<androidx.constraintlayout.widget.ConstraintLayout
-    tools:context=".StartActivity"
-    android:id="@+id/layout_main"
-    android:layout_height="match_parent"
-    android:layout_width="match_parent"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    android:id="@+id/layout_main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#6AAFF1"
+    tools:context=".StartActivity">
+
+    <ImageView
+        android:id="@+id/logo"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginTop="25dp"
+        android:src="@drawable/clock"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/app_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:fontFamily="@font/moon"
+        android:letterSpacing="0.2"
+        android:text="mobile"
+        android:textColor="#F3F3F3"
+        android:textSize="40sp"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/logo" />
 
     <EditText
+        android:drawableLeft="@drawable/user_custom"
+        android:drawablePadding="10dp"
+        android:theme="@style/EditTheme"
         android:id="@+id/login_page_email"
+        android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:layout_width="match_parent"
-        app:layout_constraintVertical_bias="0.25"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
+        android:fontFamily="@font/moon"
+        android:hint="Email"
+        android:textColor="#ECECEC"
+        android:textColorHint="#ECECEC"
+        android:letterSpacing="0.1"
         app:layout_constraintLeft_toLeftOf="parent"
-        android:hint="Email"/>
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/app_title" />
 
     <EditText
+        android:drawableLeft="@drawable/password_custom"
+        android:drawablePadding="10dp"
+        android:theme="@style/EditTheme"
         android:id="@+id/login_page_password"
+        android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:layout_width="match_parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
+        android:fontFamily="@font/moon"
         android:hint="Password"
-        app:layout_constraintTop_toBottomOf="@id/login_page_email"/>
+        android:textColor="#ECECEC"
+        android:textColorHint="#ECECEC"
+        android:inputType="textPassword"
+        android:letterSpacing="0.1"
+        android:layout_marginTop="10dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/login_page_email" />
 
     <Button
         android:id="@+id/login_page_login_button"
+        android:layout_width="200dp"
         android:layout_height="wrap_content"
-        android:layout_width="wrap_content"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/login_page_password"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="15dp"
+        android:background="@drawable/button_state"
+        android:fontFamily="@font/moon"
+        android:text="Sign in"
+        android:textSize="20dp"
         android:textAllCaps="false"
-        android:text="Sign in"/>
+        android:textColor="#ECECEC"
+        android:letterSpacing="0.1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@id/normalSignUpButton"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/login_page_password" />
+
+    <TextView
+        android:id="@+id/account_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/moon"
+        android:text="Don't you have an account?"
+        android:textColor="#ECECEC"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/normalSignUpButton"
+        android:layout_marginBottom="10dp"/>
 
     <Button
+        android:background="@drawable/button_state"
         android:id="@+id/normalSignUpButton"
-        android:layout_width="150dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="100dp"
+        android:layout_width="100dp"
+        android:layout_height="40dp"
+        android:fontFamily="@font/moon"
         android:text="Sign up"
         android:textAllCaps="false"
+        android:textSize="10dp"
+        android:textColor="#ECECEC"
+        android:letterSpacing="0.1"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/login_page_login_button" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginBottom="10dp"/>
 
-    <com.google.android.gms.common.SignInButton
-        android:id="@+id/googleSignUpButton"
-        android:layout_width="150dp"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="16dp"
+    <View
+        android:id="@+id/divide_line"
+        android:layout_width="300dp"
+        android:layout_height="1dp"
+        android:layout_centerInParent="true"
+        android:background="#ECECEC"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/normalSignUpButton">
-
-    </com.google.android.gms.common.SignInButton>
+        app:layout_constraintTop_toBottomOf="@id/login_page_login_button"
+        android:layout_marginTop="20dp"/>
 
     <Button
-        android:id="@+id/nonMemberButton"
-        android:layout_width="150dp"
+        android:id="@+id/googleSignUpButton"
+        android:background="@drawable/button_state"
+        android:layout_width="200dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="Non-memeber"
-        android:textAllCaps="false"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/googleSignUpButton" />
+        app:layout_constraintTop_toBottomOf="@id/divide_line"
+        android:fontFamily="@font/moon"
+        android:text="GOOGLE"
+        android:textColor="#ECECEC"
+        android:textSize="20dp"
+        android:layout_marginTop="20dp"
+        android:drawableLeft="@drawable/google_custom"/>
+
+    <Button
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/button_state"
+        android:fontFamily="@font/moon"
+        android:id="@+id/nonMemberButton"
+        android:text="Non-member"
+        android:textColor="#ECECEC"
+        android:textAllCaps="false"
+        android:textSize="20dp"
+        android:letterSpacing="0.1"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/googleSignUpButton" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

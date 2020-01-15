@@ -46,10 +46,9 @@ public class SettingActivity extends AppCompatActivity {
             checkBox4.setChecked(false);
         }
 
-
         linearLayout = (LinearLayout)findViewById(R.id.linearLayout2);
         editText = new EditText(getApplicationContext());
-        editText.setHint("묘사");
+        editText.setHint("Depiction");
         editText.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
         checkBox4.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -61,7 +60,6 @@ public class SettingActivity extends AppCompatActivity {
                 }
             }
         });
-
 
         Button button = (Button)findViewById(R.id.button3);
         button.setOnClickListener(new View.OnClickListener() {
@@ -81,7 +79,7 @@ public class SettingActivity extends AppCompatActivity {
                 startService(intent1);
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(SettingActivity.this);
-                builder.setTitle("알람").setMessage("알람 설정되었다.");
+                builder.setTitle("Alarm").setMessage("Alarm is set");
                 builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {

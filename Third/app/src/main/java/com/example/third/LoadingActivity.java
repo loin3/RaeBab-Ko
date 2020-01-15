@@ -2,6 +2,7 @@ package com.example.third;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.animation.ObjectAnimator;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -20,6 +21,10 @@ public class LoadingActivity extends AppCompatActivity {
 
         ImageView imageView=findViewById(R.id.imageView);
 
+        ObjectAnimator animation = ObjectAnimator.ofFloat(imageView, "translationX", 950f);
+        animation.setDuration(1000);
+        animation.start();
+
         Handler handler=new Handler();
         handler.postDelayed(new Runnable() {
             @Override
@@ -29,7 +34,7 @@ public class LoadingActivity extends AppCompatActivity {
                 Intent intent = new Intent(getApplicationContext(), StartActivity.class);
                 startActivity(intent);
             }
-        },1500);
+        },2000);
 
     }
 }

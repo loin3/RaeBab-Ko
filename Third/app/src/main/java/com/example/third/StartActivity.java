@@ -59,7 +59,7 @@ public class StartActivity extends AppCompatActivity {
     private EditText password;
     private Button signInButton;
     private Button normalSignUpButton;
-    private SignInButton googleSignUpButton;
+    private Button googleSignUpButton;
 
     private SharedPreferences sharedPreferences;
 
@@ -73,7 +73,7 @@ public class StartActivity extends AppCompatActivity {
         email = findViewById(R.id.login_page_email);
         password = findViewById(R.id.login_page_password);
         signInButton = findViewById(R.id.login_page_login_button);
-        googleSignUpButton = (SignInButton) findViewById(R.id.googleSignUpButton);
+        googleSignUpButton = (Button) findViewById(R.id.googleSignUpButton);
         normalSignUpButton = findViewById(R.id.normalSignUpButton);
 
         // mAuth = FirebaseAuth.getInstance();
@@ -148,7 +148,6 @@ public class StartActivity extends AppCompatActivity {
                             if (task.isSuccessful()) {
                                 Log.d("TAG", "signInWithEmail:success");
                                 FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-                                Toast.makeText(getApplicationContext(), "Login success", Toast.LENGTH_SHORT).show();
                                 updateUI(user);
                             } else {
                                 Log.w("TAG", "signInWithEmail:failure", task.getException());
@@ -266,7 +265,6 @@ public class StartActivity extends AppCompatActivity {
             }
             else if (resultCode == RESULT_CANCELED){
                 // Action when we push "cancel" button in the registration page
-                Toast.makeText(StartActivity.this, "Cancel!", Toast.LENGTH_LONG).show();
             }
             else if (resultCode == 2)
                 // Action when we put null text on email or password
@@ -301,5 +299,10 @@ public class StartActivity extends AppCompatActivity {
             editor.commit();
             finish();
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        //super.onBackPressed();
     }
 }

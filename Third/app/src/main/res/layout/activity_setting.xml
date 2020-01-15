@@ -9,10 +9,15 @@
     tools:context=".SettingActivity">
 
     <TextView
+        android:background="#6AAFF1"
         android:id="@+id/textView2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="거리" />
+        android:fontFamily="@font/moon"
+        android:gravity="center_horizontal"
+        android:text="Dinstance"
+        android:textColor="#ECECEC"
+        android:textSize="30sp" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -25,46 +30,74 @@
             android:layout_height="match_parent">
 
             <RadioButton
+                android:layout_gravity="center_horizontal"
+                android:fontFamily="@font/moon"
                 android:id="@+id/radioButton1"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="500"
-                android:checked="true"/>
+                android:checked="true"
+                android:text="500 meters radius from center"
+                android:textSize="15dp"
+                android:layout_marginTop="15dp"/>
 
             <RadioButton
+                android:layout_gravity="center_horizontal"
+                android:fontFamily="@font/moon"
                 android:id="@+id/radioButton2"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="700" />
+                android:text="700 meters radius from center"
+                android:textSize="15dp"
+                android:layout_marginTop="15dp"/>
 
             <RadioButton
+                android:layout_gravity="center_horizontal"
+                android:fontFamily="@font/moon"
                 android:id="@+id/radioButton3"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="1000" />
+                android:text="1000 meters radius from center"
+                android:textSize="15dp"
+                android:layout_marginTop="15dp"/>
         </RadioGroup>
     </LinearLayout>
 
     <TextView
-        android:id="@+id/textView3"
+        android:layout_marginTop="15dp"
+        android:background="#6AAFF1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="쟤 좀 깨워라" />
+        android:fontFamily="@font/moon"
+        android:gravity="center_horizontal"
+        android:id="@+id/textView3"
+        android:text="Alarm"
+        android:textColor="#ECECEC"
+        android:textSize="30sp"/>
 
     <CheckBox
+        android:layout_marginTop="15dp"
         android:id="@+id/checkBox4"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/moon"
+        android:text="Only can be used by login user"
+        android:textSize="15dp"
+        android:layout_gravity="center_horizontal"/>
 
     <LinearLayout
         android:id="@+id/linearLayout2"
         android:layout_width="match_parent"
         android:layout_height="150dp"
-        android:orientation="horizontal"/>
+        android:orientation="horizontal" />
 
     <Button
+        android:background="@drawable/button_state"
         android:id="@+id/button3"
-        android:layout_width="match_parent"
+        android:fontFamily="@font/moon"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Button" />
+        android:layout_gravity="center_horizontal"
+        android:text="Start to action"
+        android:textColor="#ECECEC"
+        android:textSize="20sp"/>
 </LinearLayout>
