@@ -79,7 +79,8 @@ public class SettingActivity extends AppCompatActivity {
                 startService(intent1);
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(SettingActivity.this);
-                builder.setTitle("Alarm").setMessage("Alarm is set");
+                builder.setTitle("Notification").setMessage("Alarm is set!");
+                builder.setIcon(R.mipmap.mobile_round);
                 builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {

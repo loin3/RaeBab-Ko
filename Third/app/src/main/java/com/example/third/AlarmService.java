@@ -20,6 +20,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.util.Scanner;
+
 public class AlarmService extends Service {
 
 
@@ -55,9 +57,10 @@ public class AlarmService extends Service {
                     Log.d("tlqkf", "tlqkfrj");
                 }
             });
-            handleActionFoo(location, Integer.parseInt(intent.getExtras().getString("distance")));
+            String str = intent.getExtras().getString("distance");
+            String [] array = str.split(" ");
+            handleActionFoo(location, Integer.parseInt(array[0]));
         }
-
         return super.onStartCommand(intent, flags, startId);
     }
 
